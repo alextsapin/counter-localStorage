@@ -5,6 +5,8 @@ import Submit from '../Submit/Submit';
 type PropsType = {
     minValue: number
     maxValue: number
+    errorMinVal: boolean
+    errorMaxVal: boolean
     changeMinValue: (value: string) => void
     changeMaxValue: (value: string) => void
     turnOffSettings: () => void
@@ -19,6 +21,7 @@ const Settings = (props: PropsType) => {
                 label="Max value" 
                 color="primary" 
                 type="number" 
+                error={props.errorMaxVal}
                 focused 
             />
 
@@ -29,11 +32,12 @@ const Settings = (props: PropsType) => {
                 label="Min value" 
                 color="primary" 
                 type="number" 
+                error={props.errorMinVal}
                 focused 
             />
 
             <div className="btnBox btnBox_set">
-                <Submit title='SET' callBack={props.turnOffSettings}/>
+                <Submit title='SET' callBack={props.turnOffSettings} disabled={props.errorMinVal || props.errorMaxVal}/>
             </div>
         </div>
     )

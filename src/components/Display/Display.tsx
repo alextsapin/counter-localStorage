@@ -2,8 +2,8 @@ import React from 'react';
 import Submit from '../Submit/Submit';
 
 type PropsType = {
-    inc: number | null
-    maxValue: number | null
+    inc: number
+    maxValue: number
     turnOnSettings: () => void
     callBackInc: () => void
     callBackReset: () => void

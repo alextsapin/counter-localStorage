@@ -11,6 +11,10 @@ const App = () => {
     const [minValue, setMinValue] = React.useState(minValueLS !== null ? JSON.parse(minValueLS) : 0)
     const [maxValue, setMaxValue] = React.useState(maxValueLS !== null ? JSON.parse(maxValueLS) : 5)
 
+    // Ошибки
+    const [errorMinVal, setErrorMinVal] = React.useState(false)
+    const [errorMaxVal, setErrorMaxVal] = React.useState(false)
+
     // Текущее значение
     const [inc, setInc] = React.useState(minValue);
 
@@ -18,12 +22,23 @@ const App = () => {
     const [showSettings, setShowSettings] = React.useState(false)
 
     function changeMinValue (value: string) {
-        if(value !== null) {
-            setMinValue(+value)
+        if(+value >= maxValue) {
+            setErrorMinVal(true)
+        } 
+        else {
+            setErrorMinVal(false)
         }
+        setMinValue(+value)
     }
 
     function changeMaxValue (value: string) {
+        if(+value <= minValue) {
+            setErrorMaxVal(true)
+        } 
+        else {
+            setErrorMaxVal(false)
+        }
+
         if(value !== null) {
             setMaxValue(+value)
         }
@@ -40,23 +55,19 @@ const App = () => {
         setShowSettings(false)
     }
 
-    // Уберем панель настроект
+    // Уберем панель настроек
     function turnOnSettings() {
         setShowSettings(true)
     }
 
     // Increment
     function callBackInc() {
-        if(inc !== null) {
-            setInc(inc + 1)
-        }
+        setInc(inc + 1)
     }
 
     // Reset
     function callBackReset() {
-        if(minValue !== null) {
-            setInc(minValue)
-        }
+        setInc(minValue)
     }
 
     return (
@@ -69,6 +80,8 @@ const App = () => {
                             ? <Settings 
                                 minValue={minValue} 
                                 maxValue={maxValue} 
+                                errorMinVal={errorMinVal}
+                                errorMaxVal={errorMaxVal}
                                 changeMinValue={changeMinValue}
                                 changeMaxValue={changeMaxValue}
                                 turnOffSettings={turnOffSettings}
