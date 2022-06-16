@@ -2,21 +2,20 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Submit from '../Submit/Submit';
 
-function f4() {}
-
 type PropsType = {
-    minValue: number | null
+    minValue: number
     maxValue: number
     changeMinValue: (value: string) => void
+    changeMaxValue: (value: string) => void
     turnOffSettings: () => void
 }
-
 
 const Settings = (props: PropsType) => {
     return (
         <div>
             <TextField 
                 value={props.maxValue}
+                onChange={e => props.changeMaxValue(e.currentTarget.value)}
                 label="Max value" 
                 color="primary" 
                 type="number" 

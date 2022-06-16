@@ -1,24 +1,21 @@
 import React from 'react';
-import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Settings from './components/Settings/Settings';
-import Submit from './components/Submit/Submit';
 import Display from './components/Display/Display';
 
 const App = () => {
+    let minValueLS = localStorage.getItem('minValue');
+    let maxValueLS = localStorage.getItem('maxValue');
 
-    localStorage.setItem('minValue', JSON.stringify(0))
-    localStorage.setItem('maxValue', JSON.stringify(5))
+    const [minValue, setMinValue] = React.useState(minValueLS !== null ? JSON.parse(minValueLS) : 0)
+    const [maxValue, setMaxValue] = React.useState(maxValueLS !== null ? JSON.parse(maxValueLS) : 5)
 
     // Текущее значение
-    const [inc, setInc] = React.useState(0);
-
-    const [minValue, setMinValue] = React.useState<number | null>(JSON.parse(localStorage.getItem('minValue') || "{}"));
-    const [maxValue, setMaxValue] = React.useState(5)
+    const [inc, setInc] = React.useState(minValue);
 
     // Переключим дисплей
-    const [display, switchDisplay] = React.useState(false)
+    const [showSettings, setShowSettings] = React.useState(false)
 
     function changeMinValue (value: string) {
         if(value !== null) {
@@ -26,19 +23,33 @@ const App = () => {
         }
     }
 
+    function changeMaxValue (value: string) {
+        if(value !== null) {
+            setMaxValue(+value)
+        }
+    }
+
+    // Установим настройки
     function turnOffSettings() {
+        localStorage.removeItem('minValue')
+        localStorage.removeItem('maxValue')
+
         localStorage.setItem('minValue', JSON.stringify(minValue))
         localStorage.setItem('maxValue', JSON.stringify(maxValue))
-        switchDisplay(false)
+        setInc(minValue)
+        setShowSettings(false)
     }
 
+    // Уберем панель настроект
     function turnOnSettings() {
-        switchDisplay(true)
+        setShowSettings(true)
     }
 
-    // + 1
+    // Increment
     function callBackInc() {
-        setInc(inc + 1)
+        if(inc !== null) {
+            setInc(inc + 1)
+        }
     }
 
     // Reset
@@ -48,18 +59,18 @@ const App = () => {
         }
     }
 
-
     return (
         <Container fixed>
             <Grid container direction="row" justifyContent="center" alignItems="center">
                 <Grid item md={4}>
                     <div className="incBox">
                         {
-                            display
+                            showSettings
                             ? <Settings 
                                 minValue={minValue} 
                                 maxValue={maxValue} 
                                 changeMinValue={changeMinValue}
+                                changeMaxValue={changeMaxValue}
                                 turnOffSettings={turnOffSettings}
                             />
                             : <Display 
